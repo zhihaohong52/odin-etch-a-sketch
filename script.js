@@ -58,15 +58,32 @@ sizeSlider.addEventListener('change', (e) => {
     changeSize(e.target.value);
 });
 
-// Check if mouse is down
+// Check if pointer is down
 let mouseDown = false;
+let lastX = null;
+let lastY = null;
 
-document.addEventListener('mousedown', () => {
+document.addEventListener('pointerdown', (e) => {
     mouseDown = true;
+    changeColor(e); // Change color on the initial pointer down
 });
 
-document.addEventListener('mouseup', () => {
+document.addEventListener('pointerup', () => {
     mouseDown = false;
+    lastX = null;
+    lastY = null;
+});
+
+grid.addEventListener('pointerleave', () => {
+    mouseDown = false;
+    lastX = null;
+    lastY = null;
+});
+
+grid.addEventListener('pointermove', (e) => {
+    if (mouseDown) {
+        changeColor(e);
+    }
 });
 
 function changeSize(value) {
@@ -108,15 +125,63 @@ function getRandomColor() {
     return `rgb(${red}, ${green}, ${blue})`;
 }
 
+function paintCell(x, y) {
+    const index = y * currentSize + x;
+    const target = grid.children[index];
+
+    if (currentMode === 'color') {
+        target.style.backgroundColor = currentColor;
+    } else if (currentMode === 'rainbow') {
+        target.style.backgroundColor = getRandomColor();
+    } else if (currentMode === 'eraser') {
+        target.style.backgroundColor = 'white';
+    }
+}
+
+function paintLine(x0, y0, x1, y1) {
+    const dx = Math.abs(x1 - x0);
+    const dy = Math.abs(y1 - y0);
+    const sx = x0 < x1 ? 1 : -1;
+    const sy = y0 < y1 ? 1 : -1;
+    let err = dx - dy;
+
+    while (true) {
+        paintCell(x0, y0);
+
+        if (x0 === x1 && y0 === y1) break;
+
+        const e2 = err * 2;
+        if (e2 > -dy) {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dx) {
+            err += dx;
+            y0 += sy;
+        }
+    }
+}
+
 function changeColor(e) {
     if (!mouseDown) return;
-    if (currentMode === 'color') {
-        e.target.style.backgroundColor = currentColor;
-    } else if (currentMode === 'rainbow') {
-        e.target.style.backgroundColor = getRandomColor();
-    } else if (currentMode === 'eraser') {
-        e.target.style.backgroundColor = 'white';
+
+    const target = e.target;
+    if (!target.classList.contains('grid-element')) return;
+
+    const gridRect = grid.getBoundingClientRect();
+    const cellSize = gridRect.width / currentSize;
+
+    const x = Math.floor((e.clientX - gridRect.left) / cellSize);
+    const y = Math.floor((e.clientY - gridRect.top) / cellSize);
+
+    if (lastX === null || lastY === null) {
+        paintCell(x, y);
+    } else {
+        paintLine(lastX, lastY, x, y);
     }
+
+    lastX = x;
+    lastY = y;
 }
 
 function activateButton(newMode){
