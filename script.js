@@ -7,15 +7,16 @@ let currentSize = DEFAULT_SIZE;
 let currentMode = DEFAULT_MODE;
 
 function setColor(color) {
-  currentColor = color;
+    currentColor = color;
 }
 
 function setSize(size) {
-  currentSize = size;
+    currentSize = size;
 }
 
 function setMode(mode) {
-  currentMode = mode;
+    activateButton(mode);
+    currentMode = mode;
 }
 
 // UI
@@ -88,16 +89,16 @@ function clearGrid() {
 }
 
 function createGrid(size) {
-    grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
-    grid.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+    grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`
+    grid.style.gridTemplateRows = `repeat(${size}, 1fr)`
 
     for (let i = 0; i < size * size; i++) {
-        const gridElement = document.createElement('div');
-        gridElement.classList.add('grid-element');
-        gridElement.addEventListener('mouseover', changeColor);
-        gridElement.addEventListener('mousedown', changeColor);
-        grid.appendChild(gridElement);
-    }
+        const gridElement = document.createElement('div')
+        gridElement.classList.add('grid-element')
+        gridElement.addEventListener('mouseover', changeColor)
+        gridElement.addEventListener('mousedown', changeColor)
+        grid.appendChild(gridElement)
+  }
 }
 
 function getRandomColor() {
@@ -138,6 +139,5 @@ function activateButton(newMode){
 
 window.onload = () => {
     createGrid(DEFAULT_SIZE);
-    updateSizeValue(DEFAULT_SIZE);
     activateButton(DEFAULT_MODE);
 }
