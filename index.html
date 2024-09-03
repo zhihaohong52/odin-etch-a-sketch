@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-A-Sketch</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+
+    <script
+        src="https://kit.fontawesome.com/4c536a6bd5.js"
+        crossorigin="anonymous"
+    ></script>
+</head>
+<body>
+    <header class="header">
+        <h1 class="header__title">Etch-A-Sketch</h1>
+    </header>
+    <main class="main">
+        <div class="container">
+            <input id="colorPicker" type="color" value="#000000">
+            <button id="colorBtn">Color mode</button>
+            <button id="rainbowBtn">Rainbow mode</button>
+            <button id="eraserBtn">Eraser</button>
+            <button id="clearBtn">Clear</button>
+            <div class="size-value" id="sizeValue">16x16</div>
+            <input id="sizeSlider" type="range" min="2" max="100" value="16">
+        </div>
+        <div class="grid" id="grid"></div>
+    </main>
+    <footer class="footer">
+        <p>
+            Copyright ©
+            <script>
+                document.write(new Date().getFullYear());
+            </script>
+            zhihaohong52. All rights reserved.
+        </p>
+        <a href="https://github.com/zhihaohong52" target="_blank">
+            <i class="fab fa-github"></i>
+        </a>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
